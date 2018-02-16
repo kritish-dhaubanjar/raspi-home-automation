@@ -18,5 +18,7 @@ public class Main extends PinProvider{
          * ItemController.listItem();
          **/
 
+        System.out.println("Hello World");
+
     }
 }
