@@ -1,11 +1,16 @@
 package com.itemOut.home;
 
 import com.pi4j.io.gpio.*;
+import com.trigger.home.Trigger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface IItem {
 
     static GpioController gpio = GpioFactory.getInstance();
 
+    List<Trigger> itemsTriggerList = new ArrayList<>();
     /**
      * String deviceName;              //db
      * String notes;                   //db
@@ -18,6 +23,8 @@ public interface IItem {
      **/
 
     void setState(boolean state);
+
+    void loadTriggerItems();
 
     void setGpioPin(int gpioPin);
 

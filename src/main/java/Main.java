@@ -2,9 +2,9 @@ import com.pi4j.io.gpio.*;
 import com.trigger.home.TriggerController;
 import com.itemOut.home.ItemController;
 
-public class Main extends PinProvider{
+public class Main  extends PinProvider {
 
-    public static void main(String [] args){
+    public static void main(String [] args) throws InterruptedException{
         /**
          * ItemController.registered(0);
          * ItemController.createItem("Fan", "Yasuda's Fan", 0);
@@ -19,7 +19,9 @@ public class Main extends PinProvider{
         ItemController.createItem("GPIO 01", "Pin 12", 1,0);
 
 
-        TriggerController.createTrigger("Led", "Led", 0, 1,true,true);
+        TriggerController.createTrigger("Led", "Led",
+                                        0, 1,
+                                        true,true);
 
         ItemController.getItem(0).setState(true);
         ItemController.listItem();

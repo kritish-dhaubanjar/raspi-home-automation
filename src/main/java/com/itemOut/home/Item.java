@@ -1,13 +1,19 @@
 package com.itemOut.home;
 
 import com.pi4j.io.gpio.*;
+import com.trigger.home.Trigger;
+import com.trigger.home.TriggerController;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 public class Item extends PinProvider implements IItem {
 
     private static GpioController gpio = GpioFactory.getInstance();
+    private List<Trigger> itemsTriggerList = new ArrayList<>();
 
     private int roomId = 0;                 //db
     private String deviceName;              //db
@@ -40,7 +46,24 @@ public class Item extends PinProvider implements IItem {
     public void setState(boolean state) {
         output.setState(state);
         this.state = output.getState();
+        /* Trigger Items with Query */
+        for(Trigger trigger: itemsTriggerList){
+            if(trigger.isShouldBeState() == state){
+//                ItemController.getItem(trigger.getSlavePin()).setState(trigger.isTriggerState());
+            }
+        }
         setUpdate();
+    }
+
+    /** Load Trigger Items associated with item, masterPin == gpio */
+    public void loadTriggerItems(){
+        for(Trigger trigger: TriggerController.triggerList){
+            if(!itemsTriggerList.contains(trigger)) {
+                if (trigger.getMasterPin() == this.gpioPin) {
+                    itemsTriggerList.add(trigger);
+                }
+            }
+        }
     }
 
     @Override
@@ -71,6 +94,18 @@ public class Item extends PinProvider implements IItem {
     /** Release Pin before delete || update */
     public void releasePin(){
         gpio.unprovisionPin(this.output);
+    }
+
+    public void listTrigger(){
+        System.out.println("/********Item's Trigger List*********/");
+        for(Trigger trigger : itemsTriggerList ){
+            System.out.println( "Name: " + trigger.getName() + "\n" +
+                    "Master: " + trigger.getMasterPin() + "\n" +
+                    "Slave: " + trigger.getSlavePin() + "\n" +
+                    "MasterShould: " + trigger.isShouldBeState() + "\n" +
+                    "SlaveShould: " + trigger.isTriggerState() + "\n");
+        }
+        System.out.println("/************************************/");
     }
 
     //Getters and Setters

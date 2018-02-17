@@ -13,9 +13,7 @@ public class Trigger{
 
     private String name;
     private String note;
-    private Item master;
     private boolean shouldBeState;
-    private Item slave;
     private boolean triggerState;
     private LocalDateTime created;
     private LocalDateTime updated;
@@ -27,6 +25,7 @@ public class Trigger{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Trigger trigger = (Trigger) o;
+//        return (masterPin == trigger.masterPin && slavePin == trigger.slavePin);
         return (masterPin == trigger.masterPin && slavePin == trigger.slavePin) ||
                 (masterPin == trigger.slavePin && slavePin == trigger.masterPin);
     }
@@ -38,8 +37,8 @@ public class Trigger{
 
     /** Temporary Trigger*/
     public Trigger(int masterPin, int slavePin){
-        this.master = master;
-        this.slave = slave;
+        this.masterPin = masterPin;
+        this.slavePin = slavePin;
     }
 
     public Trigger(String name, String note, int masterPin, int slavePin, boolean shouldBeState, boolean triggerState){
@@ -56,52 +55,23 @@ public class Trigger{
         if(ItemController.registered(masterPin) && ItemController.registered(slavePin)){
             this.masterPin = masterPin;
             this.slavePin = slavePin;
-            this.master = ItemController.getItem(ItemController.getItemList().indexOf(new Item(masterPin)));
-            this.slave = ItemController.getItem(ItemController.getItemList().indexOf(new Item(slavePin)));
         }
-        master.getOutput().removeAllListeners();
-        setTrigger();
-    }
-
-    public void setTrigger() {
-
-        master.getOutput().addListener(new GpioPinListenerDigital() {
-            @Override
-            public void handleGpioPinDigitalStateChangeEvent(GpioPinDigitalStateChangeEvent event) {
-                if (shouldBeState) {
-                    if (event.getState().isHigh())
-                        slave.setState(triggerState);
-                    System.out.println(slave.getState());
-                } else {
-                    if (event.getState().isLow())
-                        slave.setState(triggerState);
-                    System.out.println(slave.getState());
-                }
-            }
-        });
     }
 
     public void setSlavePin(int slavePin) {
         this.slavePin = slavePin;
-        createMasterSlave(masterPin, slavePin);
     }
 
     public void setMasterPin(int masterPin) {
         this.masterPin = masterPin;
-        createMasterSlave(masterPin, slavePin);
     }
 
     public void setTriggerState(boolean triggerState) {
         this.triggerState = triggerState;
-        master.getOutput().removeAllListeners();
-        setTrigger();
     }
 
     public void setShouldBeState(boolean shouldBeState) {
         this.shouldBeState = shouldBeState;
-        master.getOutput().removeAllListeners();
-        setTrigger();
-
     }
 
     public String getName() {
@@ -128,24 +98,8 @@ public class Trigger{
         this.note = note;
     }
 
-    public Item getMaster() {
-        return master;
-    }
-
-    public void setMaster(Item master) {
-        this.master = master;
-    }
-
     public boolean isShouldBeState() {
         return shouldBeState;
-    }
-
-    public Item getSlave() {
-        return slave;
-    }
-
-    public void setSlave(Item slave) {
-        this.slave = slave;
     }
 
     public boolean isTriggerState() {

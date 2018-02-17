@@ -1,5 +1,7 @@
 package com.trigger.home;
 
+import com.itemOut.home.ItemController;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,6 +15,7 @@ public class TriggerController {
     public static boolean createTrigger(String name, String note, int masterPin, int slavePin, boolean shouldBeState, boolean triggerState){
         if(!triggerList.contains(new Trigger(masterPin, slavePin))){
             triggerList.add(new Trigger(name, note, masterPin, slavePin, shouldBeState, triggerState));
+            ItemController.getItem(masterPin).loadTriggerItems();
             return true;
         }
         return false;
