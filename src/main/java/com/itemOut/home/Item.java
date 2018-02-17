@@ -9,7 +9,7 @@ public class Item extends PinProvider implements IItem {
 
     private static GpioController gpio = GpioFactory.getInstance();
 
-    private int roomId = 0;
+    private int roomId = 0;                 //db
     private String deviceName;              //db
     private String notes;                   //db
     private int gpioPin;                    //db
@@ -133,4 +133,5 @@ public class Item extends PinProvider implements IItem {
     public void setUpdate() {
         this.updated = LocalDateTime.now();
     }
+
 }
