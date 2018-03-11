@@ -49,7 +49,7 @@ public class Item extends PinProvider implements IItem {
         /* Trigger Items with Query */
         for(Trigger trigger: itemsTriggerList){
             if(trigger.isShouldBeState() == state){
-//                ItemController.getItem(trigger.getSlavePin()).setState(trigger.isTriggerState());
+                ItemController.getItem(trigger.getSlavePin()).setState(trigger.isTriggerState());
             }
         }
         setUpdate();
