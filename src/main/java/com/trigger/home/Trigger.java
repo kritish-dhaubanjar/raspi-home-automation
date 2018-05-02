@@ -41,6 +41,7 @@ public class Trigger{
         this.slavePin = slavePin;
     }
 
+    /** Create a new Trigger*/
     public Trigger(String name, String note, int masterPin, int slavePin, boolean shouldBeState, boolean triggerState){
         this.name = name;
         this.note = note;
@@ -51,6 +52,7 @@ public class Trigger{
         createMasterSlave(masterPin, slavePin);
     }
 
+    /** Set Master and Slave Items' Pins*/
     public void createMasterSlave(int masterPin, int slavePin){
         if(ItemController.registered(masterPin) && ItemController.registered(slavePin)){
             this.masterPin = masterPin;

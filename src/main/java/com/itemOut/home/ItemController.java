@@ -5,9 +5,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public final class ItemController{
+
+    /** Populated from DB */
     private static List<Item> itemList = new ArrayList<>();
 
-    private ItemController(){}
+    public ItemController(){}
 
     public static List<Item> getItemList() {
         return itemList;
@@ -32,6 +34,11 @@ public final class ItemController{
     public static Item getItem(int gpioPin){
         int id = itemList.indexOf(new Item(gpioPin));
         return itemList.get(id);
+    }
+
+    /** Set State of Item */
+    public static void setState(int gpioPin, boolean state){
+        getItem(gpioPin).setState(state);
     }
 
     /** Update Item */

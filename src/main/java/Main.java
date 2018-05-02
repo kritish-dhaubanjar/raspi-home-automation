@@ -8,7 +8,7 @@ public class Main  extends PinProvider {
         /**
          * ItemController.registered(0);
          * ItemController.createItem("Fan", "Yasuda's Fan", 0);
-         * ItemController.getMaster(0);
+         * ItemController.getItem(0);
          * ItemController.updateItem(0,"TV", "Yasuda", 1);
          * ItemController.deleteItem(0);
          * ItemController.listItem();
@@ -18,12 +18,12 @@ public class Main  extends PinProvider {
         ItemController.createItem("GPIO 00", "Pin 11", 0, 0);
         ItemController.createItem("GPIO 01", "Pin 12", 1,0);
 
-
         TriggerController.createTrigger("Led", "Led",
                                         0, 1,
                                         true,true);
 
         ItemController.getItem(0).setState(true);
+        ItemController.setState(0, true);
         ItemController.listItem();
     }
 }

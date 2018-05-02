@@ -43,6 +43,7 @@ public class TriggerController {
         return  false;
     }
 
+
     public static void listTrigger(){
         Iterator<Trigger> i = triggerList.iterator();
         System.out.println("/************************************/");

@@ -22,12 +22,24 @@ public interface IItem {
      * LocalDateTime updated;          //db
      **/
 
+    /**
+     * Set the Item's state to passed state, and also Trigger associated items to valid state as defined.
+     *
+     * @param state Change-to State
+     */
     void setState(boolean state);
 
+    /** Load Trigger Items associated with item, masterPin == gpio
+     */
     void loadTriggerItems();
 
+    /**
+     * Set gpioPin of the Item.
+     * @param gpioPin GPIO Pin of Pi.
+     */
     void setGpioPin(int gpioPin);
 
+    /** Release Pin before delete || update */
     void releasePin();
 
     @Override

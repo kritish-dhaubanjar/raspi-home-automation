@@ -3,10 +3,8 @@ package com.itemOut.home;
 import com.pi4j.io.gpio.*;
 import com.trigger.home.Trigger;
 import com.trigger.home.TriggerController;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +23,6 @@ public class Item extends PinProvider implements IItem {
     private LocalDateTime created;          //db
     private LocalDateTime updated;          //db
 
-    /** Create Temporary Instance*/
     public Item(int gpioPin){
         this.gpioPin = gpioPin;
     }
@@ -55,7 +52,6 @@ public class Item extends PinProvider implements IItem {
         setUpdate();
     }
 
-    /** Load Trigger Items associated with item, masterPin == gpio */
     public void loadTriggerItems(){
         for(Trigger trigger: TriggerController.triggerList){
             if(!itemsTriggerList.contains(trigger)) {
@@ -91,7 +87,6 @@ public class Item extends PinProvider implements IItem {
         setUpdate();
     }
 
-    /** Release Pin before delete || update */
     public void releasePin(){
         gpio.unprovisionPin(this.output);
     }
