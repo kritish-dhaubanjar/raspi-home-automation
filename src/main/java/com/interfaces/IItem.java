@@ -1,4 +1,4 @@
-package com.itemOut.home;
+package com.interfaces;
 
 import com.pi4j.io.gpio.*;
 import com.trigger.home.Trigger;
@@ -9,8 +9,8 @@ import java.util.List;
 public interface IItem {
 
     static GpioController gpio = GpioFactory.getInstance();
-
     List<Trigger> itemsTriggerList = new ArrayList<>();
+
     /**
      * String deviceName;              //db
      * String notes;                   //db
@@ -24,12 +24,11 @@ public interface IItem {
 
     /**
      * Set the Item's state to passed state, and also Trigger associated items to valid state as defined.
-     *
      * @param state Change-to State
      */
-    void setState(boolean state);
+    boolean setState(boolean state);
 
-    /** Load Trigger Items associated with item, masterPin == gpio
+    /** Load Trigger Items associated with item, masterPin == gpioPin
      */
     void loadTriggerItems();
 

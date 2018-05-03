@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="HomeAutomation">
+    <output-path>$PROJECT_DIR$/out/artifacts/HomeAutomation</output-path>
+    <root id="archive" name="HomeAutomation.jar" />
+  </artifact>
+</component>

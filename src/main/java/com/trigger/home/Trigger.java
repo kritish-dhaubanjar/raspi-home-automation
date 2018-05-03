@@ -11,11 +11,11 @@ import java.util.Objects;
 
 public class Trigger{
 
+    private int _id;
     private String name;
     private String note;
     private boolean shouldBeState;
     private boolean triggerState;
-    private LocalDateTime created;
     private LocalDateTime updated;
     private int masterPin;
     private int slavePin;
@@ -47,8 +47,7 @@ public class Trigger{
         this.note = note;
         this.shouldBeState = shouldBeState;
         this.triggerState = triggerState;
-        this.created = LocalDateTime.now();
-        this.updated = created;
+        this.updated = LocalDateTime.now();
         createMasterSlave(masterPin, slavePin);
     }
 
@@ -108,9 +107,9 @@ public class Trigger{
         return triggerState;
     }
 
-    public LocalDateTime getCreated() {
-        return created;
-    }
+    public int get_id() { return _id; }
+
+    public void set_id(int _id) { this._id = _id; }
 
     public LocalDateTime getUpdated() {
         return updated;

@@ -1,15 +1,22 @@
 package com.itemOut.home;
 
+import com.database.DataSource;
+import com.interfaces.IItemController;
+
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public final class ItemController{
+public final class ItemController implements IItemController{
 
     /** Populated from DB */
     private static List<Item> itemList = new ArrayList<>();
+    private static DataSource dataSource = new DataSource();
 
-    public ItemController(){}
+    public ItemController(){
+        dataSource.dbGetItems(this);
+    }
 
     public static List<Item> getItemList() {
         return itemList;
@@ -21,10 +28,13 @@ public final class ItemController{
     }
 
     /** Create New Item */
-    public static boolean createItem(String deviceName, String notes, int gpioPin, int roomId){
+    public boolean createItem(boolean firstRun, String deviceName, String notes, int gpioPin, int roomId){
         if(!registered(gpioPin)) {
             Item newItem = new Item(deviceName, notes, gpioPin, roomId);
             itemList.add(newItem);
+            if(!firstRun) {
+                return dataSource.dbInsertItem(gpioPin, deviceName, notes, roomId);
+            }
             return true;
         }
         return false;
@@ -37,12 +47,13 @@ public final class ItemController{
     }
 
     /** Set State of Item */
-    public static void setState(int gpioPin, boolean state){
+    public void setState(int gpioPin, boolean state){
         getItem(gpioPin).setState(state);
+        dataSource.dbUpdateItemState(gpioPin, state);
     }
 
     /** Update Item */
-    public static boolean updateItem(int oldPin, String deviceName, String notes, int newPin, int roomId){
+    public boolean updateItem(int oldPin, String deviceName, String notes, int newPin, int roomId){
 
         if (oldPin!=newPin && registered(newPin))
             return false;
@@ -55,18 +66,18 @@ public final class ItemController{
             item.setRoomId(roomId);
             if(oldPin != newPin)
                 item.setGpioPin(newPin);
-            return true;
+            return dataSource.dbUpdateItem(oldPin, deviceName, notes, newPin, roomId);
         }
         return false;
     }
 
     /** Delete Item */
-    public static boolean deleteItem(int gpioPin){
+    public boolean deleteItem(int gpioPin){
         if(registered(gpioPin)){
             int id = itemList.indexOf(new Item(gpioPin));
             itemList.get(id).releasePin();
             itemList.remove(id);
-            return true;
+            return dataSource.dbDeleteItem(gpioPin);
         }
         return false;
     }
@@ -81,8 +92,7 @@ public final class ItemController{
                                 "GPIO: " +item.getGpioPin() + "\n" +
                                 "State: " +item.getState() + "\n" +
                                 "Note: " +item.getNotes() + "\n" +
-                                "Updated: " + item.getUpdated().toString() + "\n" +
-                                "Created: " + item.getCreated().toString());
+                                "Updated: " + item.getUpdated().toString());
         }
         System.out.println("/************************************/");
     }

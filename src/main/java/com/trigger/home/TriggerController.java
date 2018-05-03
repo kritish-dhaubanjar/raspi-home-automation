@@ -1,48 +1,76 @@
 package com.trigger.home;
 
+import com.database.DataSource;
+import com.interfaces.ITriggerController;
 import com.itemOut.home.ItemController;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TriggerController {
+public class TriggerController implements ITriggerController {
 
     public static List<Trigger> triggerList= new ArrayList<>();
+    private static DataSource dataSource = new DataSource();
 
-    private TriggerController(){}
+    public TriggerController(){
+        dataSource.dbGetTriggers(this);
+    }
 
-    public static boolean createTrigger(String name, String note, int masterPin, int slavePin, boolean shouldBeState, boolean triggerState){
+    public boolean createTrigger(int _id, String name, String note, int masterPin, int slavePin, boolean shouldBeState, boolean triggerState){
         if(!triggerList.contains(new Trigger(masterPin, slavePin))){
-            triggerList.add(new Trigger(name, note, masterPin, slavePin, shouldBeState, triggerState));
+            Trigger trigger = new Trigger(name, note, masterPin, slavePin, shouldBeState, triggerState);
+            trigger.set_id(_id);
+            triggerList.add(trigger);
             ItemController.getItem(masterPin).loadTriggerItems();
             return true;
         }
         return false;
     }
 
-    public static boolean deleteTrigger(Trigger trigger){
-        int id = triggerList.indexOf(trigger);
-        if(id>=0) {
-            triggerList.remove(id);
+    public boolean createTrigger(String name, String note, int masterPin, int slavePin, boolean shouldBeState, boolean triggerState){
+        if(!triggerList.contains(new Trigger(masterPin, slavePin))){
+            Trigger trigger = new Trigger(name, note, masterPin, slavePin, shouldBeState, triggerState);
+            triggerList.add(trigger);
+            int _id = dataSource.dbInsertTrigger(name, note, masterPin, slavePin, shouldBeState, triggerState);
+            trigger.set_id(_id);
+            ItemController.getItem(masterPin).loadTriggerItems();
             return true;
         }
         return false;
     }
 
-    public static boolean updateTrigger(Trigger trigger, String name, String note, int masterPin,
+    public boolean deleteTrigger(int _id){
+        int id = triggerList.indexOf(getTriggerFromId(_id));
+        if(id>=0) {
+            triggerList.remove(id);
+            return dataSource.dbDeleteTrigger(_id);
+        }
+        return false;
+    }
+
+    public boolean updateTrigger(int _id, String name, String note, int masterPin,
                                         int slavePin, boolean shouldBeState, boolean triggerState){
         if(!triggerList.contains(new Trigger(masterPin, slavePin))){
+            Trigger trigger = getTriggerFromId(_id);
             trigger.setName(name);
             trigger.setNote(note);
             trigger.setMasterPin(masterPin);
             trigger.setSlavePin(slavePin);
             trigger.setShouldBeState(shouldBeState);
             trigger.setTriggerState(triggerState);
+            return dataSource.dbUpdateTrigger(_id, name, note, masterPin, slavePin, shouldBeState, triggerState);
         }
         return  false;
     }
 
+    private Trigger getTriggerFromId(int _id){
+        for(Trigger trigger : triggerList){
+            if(trigger.get_id() == _id)
+                return trigger;
+        }
+        return null;
+    }
 
     public static void listTrigger(){
         Iterator<Trigger> i = triggerList.iterator();

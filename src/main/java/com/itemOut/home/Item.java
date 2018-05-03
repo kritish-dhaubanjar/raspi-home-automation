@@ -1,6 +1,8 @@
 package com.itemOut.home;
 
+import com.database.DataSource;
 import com.pi4j.io.gpio.*;
+import com.interfaces.IItem;
 import com.trigger.home.Trigger;
 import com.trigger.home.TriggerController;
 import java.time.LocalDateTime;
@@ -12,6 +14,7 @@ public class Item extends PinProvider implements IItem {
 
     private static GpioController gpio = GpioFactory.getInstance();
     private List<Trigger> itemsTriggerList = new ArrayList<>();
+    private DataSource dataSource = new DataSource();
 
     private int roomId = 0;                 //db
     private String deviceName;              //db
@@ -20,7 +23,6 @@ public class Item extends PinProvider implements IItem {
     private Pin GPIOPin;
     private GpioPinDigitalOutput output;
     private PinState state;                 //db
-    private LocalDateTime created;          //db
     private LocalDateTime updated;          //db
 
     public Item(int gpioPin){
@@ -36,13 +38,13 @@ public class Item extends PinProvider implements IItem {
         this.output = gpio.provisionDigitalOutputPin(this.GPIOPin, deviceName, PinState.LOW);
         this.output.setShutdownOptions(true);
         this.state = output.getState();
-        this.created = LocalDateTime.now();
         this.updated = LocalDateTime.now();
     }
 
-    public void setState(boolean state) {
+    public boolean setState(boolean state) {
         output.setState(state);
         this.state = output.getState();
+
         /* Trigger Items with Query */
         for(Trigger trigger: itemsTriggerList){
             if(trigger.isShouldBeState() == state){
@@ -50,6 +52,7 @@ public class Item extends PinProvider implements IItem {
             }
         }
         setUpdate();
+        return true;
     }
 
     public void loadTriggerItems(){
@@ -154,10 +157,6 @@ public class Item extends PinProvider implements IItem {
 
     public LocalDateTime getUpdated() {
         return updated;
-    }
-
-    public LocalDateTime getCreated(){
-        return created;
     }
 
     public void setUpdate() {
