@@ -4,19 +4,19 @@ import com.itemOut.home.ItemController;
 import com.trigger.home.TriggerController;
 
 import java.sql.*;
-import java.util.List;
 
 public class DataSource {
 
-    public static final String URL = "jdbc:mysql://127.0.0.1:3306/homeAutomation";
-    public static final String username = "root";
-    public static final String password = "toor";
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/homeAutomation";
+    private static final String username = "root";
+    private static final String password = "toor";
     private Connection connection;
     private Statement statement;
     private PreparedStatement updateItem;
     private PreparedStatement insertItem;
     private PreparedStatement insertTrigger;
     private PreparedStatement updateTrigger;
+    private PreparedStatement updateItemState;
 
     private static final String updateItemQuery = "UPDATE items SET gpioPin = ?, deviceName = ?, notes = ?, roomId = ? " +
             "WHERE gpioPin = ?";
@@ -26,6 +26,7 @@ public class DataSource {
             "triggerState=?, masterPin=?, slavePin=? WHERE _id=?";
     private static final String insertTriggerQuery = "INSERT INTO triggers(name, note, shouldBeState, triggerState," +
             "masterPin, slavePin) VALUES (?,?,?,?,?,?)";
+    private static final String updateItemStateQuery = "UPDATE items set state = ?, updated_at = ? WHERE gpioPin = ?";
 
     public DataSource(){
         try{
@@ -35,6 +36,7 @@ public class DataSource {
             insertItem = connection.prepareStatement(insertItemQuery);
             updateTrigger = connection.prepareStatement(updateTriggerQuery);
             insertTrigger = connection.prepareStatement(insertTriggerQuery, Statement.RETURN_GENERATED_KEYS);
+            updateItemState = connection.prepareStatement(updateItemStateQuery);
             this.connection = connection;
         }catch(SQLException e){
             System.out.println(e.getMessage());
@@ -98,7 +100,11 @@ public class DataSource {
 
     public boolean dbUpdateItemState(int gpioPin, boolean state){
         try{
-            return statement.execute("UPDATE items set state = " + state + " WHERE gpioPin = " + gpioPin);
+            updateItemState.setBoolean(1,state);
+            Timestamp date = new Timestamp(new java.util.Date().getTime());
+            updateItemState.setTimestamp(2, date);
+            updateItemState.setInt(3,gpioPin);
+            return updateItemState.execute();
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
@@ -189,9 +195,5 @@ public class DataSource {
             System.out.println(e.getMessage());
         }
     }
-
-
-
-
 
 }

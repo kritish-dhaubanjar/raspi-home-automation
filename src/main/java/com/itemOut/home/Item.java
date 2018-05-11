@@ -49,6 +49,7 @@ public class Item extends PinProvider implements IItem {
         for(Trigger trigger: itemsTriggerList){
             if(trigger.isShouldBeState() == state){
                 ItemController.getItem(trigger.getSlavePin()).setState(trigger.isTriggerState());
+                dataSource.dbUpdateItemState(trigger.getSlavePin(), trigger.isTriggerState());
             }
         }
         setUpdate();
