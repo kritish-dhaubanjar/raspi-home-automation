@@ -42,8 +42,10 @@ public class TriggerController implements ITriggerController {
 
     public boolean deleteTrigger(int _id){
         int id = triggerList.indexOf(getTriggerFromId(_id));
+        int masterPinOfTrigger = triggerList.get(id).getMasterPin();
         if(id>=0) {
             triggerList.remove(id);
+            ItemController.getItem(masterPinOfTrigger).loadTriggerItems();
             return dataSource.dbDeleteTrigger(_id);
         }
         return false;

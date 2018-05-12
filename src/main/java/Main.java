@@ -1,6 +1,7 @@
 import client.IPiServer;
 import client.PiServer;
 import com.pi4j.io.gpio.*;
+import com.trigger.home.TriggerController;
 
 import java.rmi.Naming;
 
@@ -11,6 +12,7 @@ public class Main  extends PinProvider {
 //        Registry registry = LocateRegistry.createRegistry(1099);
 //        client.PiServer server = new client.PiServer();
 //        registry.bind("PISERVER", server);
+
 
         IPiServer piServer;
         System.setProperty("java.rmi.server.hostname", "raspberrypi.local");

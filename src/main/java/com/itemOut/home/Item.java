@@ -57,6 +57,7 @@ public class Item extends PinProvider implements IItem {
     }
 
     public void loadTriggerItems(){
+        itemsTriggerList.clear();
         for(Trigger trigger: TriggerController.triggerList){
             if(!itemsTriggerList.contains(trigger)) {
                 if (trigger.getMasterPin() == this.gpioPin) {
