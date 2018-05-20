@@ -6,7 +6,7 @@ public class Sender extends Thread {
 
     private final String message = "REFRESH";
     private final int port = 8085;
-    private final String host = "224.0.0.1";
+    private final String host = "224.0.1.2";
 
     public Sender(){}
 
