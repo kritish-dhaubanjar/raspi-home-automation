@@ -22,7 +22,7 @@ public class DataSource {
             "WHERE gpioPin = ?";
     private static final String insertItemQuery = "INSERT INTO items(gpioPin, deviceName, notes, state, roomId)" +
             " VALUES(?,?,?,?,?)";
-    private static final String updateTriggerQuery = "UPDATE triggers SET name=?, note=?, shouldBeState = ?, " +
+    private static final String updateTriggerQuery = "UPDATE triggers SET name=?, note=?, shouldBeState=?, " +
             "triggerState=?, masterPin=?, slavePin=? WHERE _id=?";
     private static final String insertTriggerQuery = "INSERT INTO triggers(name, note, shouldBeState, triggerState," +
             "masterPin, slavePin) VALUES (?,?,?,?,?,?)";

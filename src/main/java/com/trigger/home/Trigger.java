@@ -52,6 +52,10 @@ public class Trigger{
     }
 
     /** Set Master and Slave Items' Pins*/
+    /**
+     * @param masterPin The master Pin of Trigger
+     * @param slavePin The slave Pin of master
+     */
     public void createMasterSlave(int masterPin, int slavePin){
         if(ItemController.registered(masterPin) && ItemController.registered(slavePin)){
             this.masterPin = masterPin;

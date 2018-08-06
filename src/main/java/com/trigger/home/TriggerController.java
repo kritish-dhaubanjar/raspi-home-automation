@@ -53,7 +53,10 @@ public class TriggerController implements ITriggerController {
 
     public boolean updateTrigger(int _id, String name, String note, int masterPin,
                                         int slavePin, boolean shouldBeState, boolean triggerState){
-        if(!triggerList.contains(new Trigger(masterPin, slavePin))){
+        if(triggerList.contains(new Trigger(masterPin, slavePin))){
+
+            System.out.println("updateTrigger(" + _id+ "," + name + "," + " ," +
+                    masterPin + "," + slavePin + "," + shouldBeState + "," + triggerState + ")");
             Trigger trigger = getTriggerFromId(_id);
             trigger.setName(name);
             trigger.setNote(note);
